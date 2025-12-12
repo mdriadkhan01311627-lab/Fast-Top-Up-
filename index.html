@@ -104,20 +104,52 @@
         .wallet-balance { display: flex; align-items: center; background: #fff8e1; padding: 8px 12px; border-radius: 20px; font-weight: 600; border: 1px solid var(--primary-color); }
         .wallet-balance svg { width: 20px; height: 20px; margin-right: 8px; fill: var(--primary-color); }
 
-        /* Notice Bar */
-        .notice-bar { 
-    background: linear-gradient(135deg, #5e2ced, #8a2be2); 
-    color: white; 
-    padding: 12px 15px; 
-    font-weight: 500; 
-    font-size: 0.95rem; 
-    text-align: center; 
-    line-height: 1.5; 
-    position: relative; 
-    z-index: 100; 
-    font-family: 'Hind Siliguri', Arial, sans-serif; 
-    border-bottom: 2px solid rgba(255,255,255,0.1); 
-        }
+        /*Notice Bar*/
+        <!-- Premium Notice Board with CSS -->
+<div class="notice-bar" style="
+    background: linear-gradient(90deg, #0F1923 0%, #1a1f2e 100%);
+    color: white;
+    padding: 12px 20px;
+    border-left: 5px solid #FF4655;
+    border-radius: 0 8px 8px 0;
+    margin: 10px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+">
+    <div style="
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    ">
+        <!-- Notice Icon -->
+        <div style="
+            color: #FFD700;
+            font-size: 1.2rem;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 8px;
+            border-radius: 50%;
+        ">
+            📢
+        </div>
+        
+        <!-- Notice Text -->
+        <div style="
+            flex: 1;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            white-space: normal;
+            word-wrap: break-word;
+            max-width: 100%;
+        ">
+            <strong>NOTICE:</strong> Fast Top Up X data tool for also bit-out apps. Weekly offers available. 24/7 customer support. Instant delivery guaranteed. Special discounts for first-time users!
+        </div>
+        
+        <!-- Time -->
+        <div style="color: #aaa; font-size: 0.8rem; white-space: nowrap;">
+            <i class="far fa-clock"></i> Just Now
+        </div>
+    </div>
+</div>
 
         /* Slider */
         .slider-container { position: relative; max-width: 1200px; margin: 20px auto; border-radius: 12px; overflow: hidden; box-shadow: var(--card-shadow); }
@@ -1373,6 +1405,7 @@
 </body>
 
 </html>
+
 
 
 
