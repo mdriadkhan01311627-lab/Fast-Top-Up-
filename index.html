@@ -790,15 +790,174 @@
         }
 
         function initSlider() {
-            const slider = document.querySelector('.slider');
-            if (!slider || slider.children.length <= 1) return;
-            let currentIndex = 0;
-            const totalSlides = document.querySelectorAll('.slide').length;
-            setInterval(() => {
-                currentIndex = (currentIndex + 1) % totalSlides;
-                slider.style.transform = `translateX(-${currentIndex * 100}%)`;
-            }, 3000);
+    const slider = document.querySelector('.slider');
+    const container = document.querySelector('.slider-container');
+    
+    if (!slider || !container || slider.children.length <= 1) return;
+
+    let currentIndex = 0;
+    const slides = Array.from(slider.children);
+    const totalSlides = slides.length;
+    let autoSlideInterval;
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+
+    // বাউন্ডারি চেক সহ স্লাইড ফাংশন
+    const slideTo = (index) => {
+        // সাইক্লিক স্লাইডিং (ইনফাইনিট লুপ)
+        if (index < 0) {
+            index = totalSlides - 1;
+        } else if (index >= totalSlides) {
+            index = 0;
         }
+        
+        // CSS ক্লাস ব্যবহার করে ট্রানজিশন
+        slider.classList.add('slider-transition');
+        slider.style.transform = `translateX(-${index * 100}%)`;
+        
+        // ARIA attributes আপডেট
+        slides.forEach((slide, i) => {
+            slide.setAttribute('aria-hidden', i !== index);
+            if (i === index) {
+                slide.focus();
+            }
+        });
+        
+        currentIndex = index;
+        
+        // ট্রানজিশন শেষ হলে ক্লাস রিমুভ
+        setTimeout(() => {
+            slider.classList.remove('slider-transition');
+        }, 500);
+    };
+
+    const startAutoSlide = () => {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = setInterval(() => {
+            slideTo(currentIndex + 1);
+        }, 3000);
+    };
+
+    const stopAutoSlide = () => {
+        clearInterval(autoSlideInterval);
+    };
+
+    const handleStart = (e) => {
+        isDragging = true;
+        startPos = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+        prevTranslate = currentIndex * container.offsetWidth * -1;
+        
+        slider.classList.remove('slider-transition');
+        stopAutoSlide();
+    };
+
+    const handleMove = (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const currentPos = e.type.includes('mouse') ? e.pageX : e.touches[0].clientX;
+        currentTranslate = prevTranslate + currentPos - startPos;
+        slider.style.transform = `translateX(${currentTranslate}px)`;
+    };
+
+    const handleEnd = () => {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        const movedBy = currentTranslate - prevTranslate;
+        const threshold = container.offsetWidth * 0.2;
+
+        if (movedBy < -threshold) {
+            // ডানে সোয়াইপ
+            slideTo(currentIndex + 1);
+        } else if (movedBy > threshold) {
+            // বামে সোয়াইপ
+            slideTo(currentIndex - 1);
+        } else {
+            // আগের অবস্থানে ফিরে যাও
+            slideTo(currentIndex);
+        }
+        
+        startAutoSlide();
+    };
+
+    // ইভেন্ট হ্যান্ডলার সংযুক্ত করা
+    const events = {
+        mouse: {
+            start: 'mousedown',
+            move: 'mousemove',
+            end: ['mouseup', 'mouseleave']
+        },
+        touch: {
+            start: 'touchstart',
+            move: 'touchmove',
+            end: 'touchend'
+        }
+    };
+
+    // ইভেন্ট লিসেনার যোগ
+    container.addEventListener(events.touch.start, handleStart);
+    container.addEventListener(events.touch.move, handleMove);
+    container.addEventListener(events.touch.end, handleEnd);
+    
+    container.addEventListener(events.mouse.start, handleStart);
+    container.addEventListener(events.mouse.move, handleMove);
+    events.mouse.end.forEach(event => {
+        container.addEventListener(event, handleEnd);
+    });
+
+    // কি-বোর্ড নেভিগেশন
+    container.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            slideTo(currentIndex - 1);
+            stopAutoSlide();
+        } else if (e.key === 'ArrowRight') {
+            slideTo(currentIndex + 1);
+            stopAutoSlide();
+        }
+    });
+
+    // রিসাইজ হ্যান্ডলার
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            slideTo(currentIndex);
+        }, 250);
+    });
+
+    // আরো ভালো হবে যদি একটি destroy ফাংশন যোগ করা হয়
+    const destroySlider = () => {
+        clearInterval(autoSlideInterval);
+        // সব ইভেন্ট লিসেনার রিমুভ করা উচিত
+    };
+
+    // প্রথম স্লাইড সেট করা
+    slides[0].setAttribute('aria-hidden', 'false');
+    for (let i = 1; i < slides.length; i++) {
+        slides[i].setAttribute('aria-hidden', 'true');
+    }
+
+    // অটো স্লাইড শুরু
+    startAutoSlide();
+
+    // পাবলিক API
+    return {
+        next: () => slideTo(currentIndex + 1),
+        prev: () => slideTo(currentIndex - 1),
+        goTo: (index) => slideTo(index),
+        destroy: destroySlider
+    };
+}
+
+// CSS:
+/*
+.slider-transition {
+    transition: transform 0.5s ease-in-out;
+}
+*/
 
         // Authentication State Listener
         auth.onAuthStateChanged(user => {
@@ -1371,6 +1530,7 @@
 </body>
 
 </html>
+
 
 
 
