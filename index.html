@@ -660,12 +660,12 @@
                         <span class="gateway-label">Send Money to:</span>
                         <div class="gateway-number-display">
                             <span id="gateway-number">...</span>
-                            <span style="cursor:pointer; color:#555;" onclick="copyToClipboard('gateway-number')">📋</span>
+                            <span style="cursor:pointer; color:#555;" <button class="copy-btn" onclick="copyToClipboard('bkash-number')">Copy</button>onclick="copyToClipboard('gateway-number')">📋</span>
                         </div>
                     </div>
                     
                     <ul class="gateway-steps">
-                        <li>1. Go to your <span id="gateway-step-name">bKash</span> App or dial *247#</li>
+                        <li>1. *247# ডায়াল করে আপনার bKash মোবাইল মেনুতে যান অথবা bKash অ্যাপে যান।</li>
                         <li>2. "Send Money" -এ ক্লিক করুন।.</li>
                         <li>3. প্রাপক নম্বর হিসেবে উপরে দেওয়া নম্বরটি লিখুনঃ.</li>
                         <li>4. টাকার পরিমান দিন: <strong><span id="gateway-step-amount"></span></strong></li>
@@ -673,7 +673,7 @@
                         <li>6. সবকিছু ঠিক থাকলে, আপনি bKash থেকে একটি নিশ্চিতকরণ বার্তা পাবেন।
 
                             .</li>
-                        <li>7. Copy the Transaction ID (TrxID) and paste below.</li>
+                        <li>7. এখন উপরের বক্সে আপনারTransaction ID দিন এবং নিচেরVERIFY বাটনে ক্লিক করুন।</li>
                     </ul>
                     
                     <div class="gateway-input-box">
@@ -1533,6 +1533,7 @@
 </body>
 
 </html>
+
 
 
 
