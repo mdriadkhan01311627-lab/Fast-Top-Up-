@@ -317,34 +317,6 @@
                     <p class="auth-footer">
                         Don't have an account? <a href="#" class="auth-link" id="show-signup-link">Sign Up</a>
                         </form>
-<!-- এখানে Google বাটন যোগ করো -->
-<div style="text-align: center; margin: 15px 0;">
-    <div style="display: flex; align-items: center; margin: 20px 0;">
-        <div style="flex: 1; height: 1px; background: #ddd;"></div>
-        <span style="padding: 0 15px; color: #666; font-size: 14px;">OR</span>
-        <div style="flex: 1; height: 1px; background: #ddd;"></div>
-    </div>
-    
-    <button type="button" onclick="googleLogin()" style="
-        background: white;
-        color: #444;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        padding: 12px;
-        width: 100%;
-        font-size: 16px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 10px;
-    ">
-        <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google">
-        Continue with Google
-    </button>
-</div>
-<!-- তারপর আগের মতো -->
-<p class="auth-footer">
                     </p>
                 </div>
             </div>
@@ -693,12 +665,14 @@
                     </div>
                     
                     <ul class="gateway-steps">
-                        <li>1. Go to your <span id="gateway-step-name">bKash</span> App or dial *247#</li>
-                        <li>2. Choose "Send Money" option.</li>
-                        <li>3. Enter the number above.</li>
-                        <li>4. Enter amount: <strong><span id="gateway-step-amount"></span></strong></li>
-                        <li>5. Enter Reference: <strong>1</strong></li>
-                        <li>6. Enter PIN to confirm.</li>
+                        <li>1. *247# ডায়াল করে আপনার bKash মোবাইল মেনুতে যান অথবা bKash অ্যাপে যান।</li>
+                        <li>2. "Send Money" -এ ক্লিক করুন।.</li>
+                        <li>3. প্রাপক নম্বর হিসেবে উপরে দেওয়া নম্বরটি লিখুনঃ.</li>
+                        <li>4. টাকার পরিমান দিন: <strong><span id="gateway-step-amount"></span></strong></li>
+                        <li>5. নিশ্চিত করতে এখন আপনার bKash মোবাইল মেনু পিন লিখুন।: <strong>1</strong></li>
+                        <li>6. সবকিছু ঠিক থাকলে, আপনি bKash থেকে একটি নিশ্চিতকরণ বার্তা পাবেন।
+
+                            .</li>
                         <li>7. Copy the Transaction ID (TrxID) and paste below.</li>
                     </ul>
                     
@@ -754,64 +728,6 @@
         let allProducts = [];
         let currentGatewayMethod = null;
         const CURRENT_APP_VERSION = "1.0.0";
-        // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const auth = firebase.auth();
-const db = firebase.firstore();
-
-// Global Variables
-let currentUser = null;
-let currentProduct = null;
-let globalSettings = {}
-
-// =============== GOOGLE LOGIN/SIGNUP CODE ADD HERE ===============
-// গুগল লগইন ফাংশন
-function googleAuth(action) {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    
-    auth.signInWithPopup(provider)
-        .then((result) => {
-            const user = result.user;
-            console.log(`${action} successful with Google:`, user.email);
-            
-            // Redirect to dashboard
-            window.location.href = "dashboard.html";
-        })
-        .catch((error) => {
-            console.error(`Google ${action} error:`, error);
-            
-            // User-friendly error messages
-            if (error.code === 'auth/popup-blocked') {
-                alert('পপআপ ব্লক করা আছে! ব্রাউজার সেটিংস থেকে পপআপ অনুমতি দিন।');
-            } else if (error.code === 'auth/popup-closed-by-user') {
-                // User closed popup, do nothing
-            } else {
-                alert(`গুগল ${action} ব্যর্থ: ${error.message}`);
-            }
-        });
-}
-
-// HTML বাটনগুলোর জন্য ইভেন্ট লিসেনার
-document.addEventListener('DOMContentLoaded', function() {
-    // লগইন পেজের গুগল বাটন
-    const googleLoginBtn = document.getElementById('google-login-btn');
-    if (googleLoginBtn) {
-        googleLoginBtn.addEventListener('click', function() {
-            googleAuth('login');
-        });
-    }
-    
-    // সাইনআপ পেজের গুগল বাটন
-    const googleSignupBtn = document.getElementById('google-signup-btn');
-    if (googleSignupBtn) {
-        googleSignupBtn.addEventListener('click', function() {
-            googleAuth('signup');
-        });
-    }
-});
-// =============== END OF GOOGLE CODE ===============
-
-// Rest of your existing code...
 
         // UI Elements
         const splashScreen = document.getElementById('splash-screen');
@@ -1617,6 +1533,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </body>
 
 </html>
+
 
 
 
