@@ -754,6 +754,64 @@
         let allProducts = [];
         let currentGatewayMethod = null;
         const CURRENT_APP_VERSION = "1.0.0";
+        // Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firstore();
+
+// Global Variables
+let currentUser = null;
+let currentProduct = null;
+let globalSettings = {}
+
+// =============== GOOGLE LOGIN/SIGNUP CODE ADD HERE ===============
+// গুগল লগইন ফাংশন
+function googleAuth(action) {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    
+    auth.signInWithPopup(provider)
+        .then((result) => {
+            const user = result.user;
+            console.log(`${action} successful with Google:`, user.email);
+            
+            // Redirect to dashboard
+            window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+            console.error(`Google ${action} error:`, error);
+            
+            // User-friendly error messages
+            if (error.code === 'auth/popup-blocked') {
+                alert('পপআপ ব্লক করা আছে! ব্রাউজার সেটিংস থেকে পপআপ অনুমতি দিন।');
+            } else if (error.code === 'auth/popup-closed-by-user') {
+                // User closed popup, do nothing
+            } else {
+                alert(`গুগল ${action} ব্যর্থ: ${error.message}`);
+            }
+        });
+}
+
+// HTML বাটনগুলোর জন্য ইভেন্ট লিসেনার
+document.addEventListener('DOMContentLoaded', function() {
+    // লগইন পেজের গুগল বাটন
+    const googleLoginBtn = document.getElementById('google-login-btn');
+    if (googleLoginBtn) {
+        googleLoginBtn.addEventListener('click', function() {
+            googleAuth('login');
+        });
+    }
+    
+    // সাইনআপ পেজের গুগল বাটন
+    const googleSignupBtn = document.getElementById('google-signup-btn');
+    if (googleSignupBtn) {
+        googleSignupBtn.addEventListener('click', function() {
+            googleAuth('signup');
+        });
+    }
+});
+// =============== END OF GOOGLE CODE ===============
+
+// Rest of your existing code...
 
         // UI Elements
         const splashScreen = document.getElementById('splash-screen');
@@ -1559,6 +1617,7 @@
 </body>
 
 </html>
+
 
 
 
