@@ -985,21 +985,64 @@
 */
 
         // Authentication State Listener
-        auth.onAuthStateChanged(user => {
-            if (user) {
-                currentUser = user;
-                authView.classList.add('d-none');
-                appView.classList.remove('d-none');
-                initializeApp();
-            } else {
-                currentUser = null;
-                authView.classList.remove('d-none');
-                appView.classList.add('d-none');
-                showAuthSubView('login-view');
-                splashScreen.classList.add('d-none');
-            }
-        });
+           // নতুন কোড: নেভিগেশন ফাংশন
+    window.goToLogin = function() {
+        document.getElementById('app-view').classList.add('d-none');
+        document.getElementById('auth-view').classList.remove('d-none');
+        showAuthSubView('login-view');
+    }
 
+    window.goToSignup = function() {
+        document.getElementById('app-view').classList.add('d-none');
+        document.getElementById('auth-view').classList.remove('d-none');
+        showAuthSubView('signup-view');
+    }
+
+    window.goToHome = function() {
+        document.getElementById('auth-view').classList.add('d-none');
+        document.getElementById('app-view').classList.remove('d-none');
+    }
+
+    // নতুন কোড: লগইন চেক
+    auth.onAuthStateChanged(user => {
+        document.getElementById('loader').classList.add('d-none');
+        document.getElementById('splash-screen').classList.add('d-none');
+        
+        // সবসময় অ্যাপ ভিউ দেখাবে (লগইন থাকুক বা না থাকুক)
+        document.getElementById('auth-view').classList.add('d-none');
+        document.getElementById('app-view').classList.remove('d-none');
+
+        if (user) {
+            // ইউজার লগইন আছে
+            currentUser = user;
+            document.getElementById('wallet-balance-box').classList.remove('d-none');
+            document.getElementById('auth-buttons-container').classList.add('d-none');
+            
+            // লক স্ক্রিন চেক
+            db.collection('users').doc(user.uid).get().then(doc => {
+                userLockData = doc.data();
+                if (userLockData?.appLockEnabled && userLockData?.appLockPin) {
+                    document.getElementById('app-view').classList.add('d-none');
+                    document.getElementById('app-lock-screen').classList.remove('d-none');
+                    document.getElementById('app-lock-screen').classList.add('active');
+                } else {
+                    initializeApp();
+                }
+            }).catch(e => initializeApp());
+
+            listenToUserData();
+        } else {
+            // ইউজার লগইন নেই (গেস্ট)
+            currentUser = null;
+            document.getElementById('wallet-balance-box').classList.add('d-none');
+            document.getElementById('auth-buttons-container').classList.remove('d-none');
+            
+            document.getElementById('app-lock-screen').classList.add('d-none');
+            document.getElementById('app-lock-screen').classList.remove('active');
+
+            initializeApp();
+        }
+    });
         // Authentication Forms
         document.getElementById('login-form').addEventListener('submit', (e) => {
             e.preventDefault();
