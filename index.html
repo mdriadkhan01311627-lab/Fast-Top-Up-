@@ -1305,9 +1305,16 @@
         }
 
         // Purchase Modal Functions
-        function initiatePurchase(productId, productName, productPrice) {
-            if (globalSettings.maintenanceMode) return showToast("App is in maintenance", "error");
+                function initiatePurchase(productId) {
+            if (!currentUser) {
+                showToast("Please Login First!", "error");
+setTimeout(() => goToLogin(), 1000);
+                return;
+            }
             currentProduct = allProducts.find(p => p.id === productId);
+            document.getElementById('purchase-product-price').value = currentProduct.price;
+            purchaseModal.classList.add('active');
+                }
 
             // Reset UI
             document.getElementById('purchase-player-id').value = '';
