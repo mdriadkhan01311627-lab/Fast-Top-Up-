@@ -390,10 +390,18 @@
         <!-- Header -->
         <header class="app-header">
             <div class="app-logo" id="app-name-header">App</div>
-            <div class="wallet-balance">
-                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-                <span id="wallet-balance-value">0</span>
-            </div>
+            
+               <!-- ব্যালেন্স বক্স (লগইন থাকলে দেখাবে) -->
+    <div id="wallet-balance-box" class="wallet-balance d-none">
+        <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+        <span id="wallet-balance-value">0</span>
+    </div>
+
+    <!-- বাটন (লগইন না থাকলে দেখাবে) -->
+    <div id="auth-buttons-container" style="display:flex; gap:10px;">
+        <button onclick="goToLogin()" style="padding:5px 15px; border:1px solid #FBC02D; background:white; color:#FBC02D; border-radius:20px; font-weight:bold;">Login</button>
+        <button onclick="goToSignup()" style="padding:5px 15px; border:none; background:linear-gradient(45deg, #FFD700, #FBC02D); color:black; border-radius:20px; font-weight:bold;">Register</button>
+    </div>
         </header>
 
         <!-- Notice Bar -->
